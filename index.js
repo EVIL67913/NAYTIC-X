@@ -362,3 +362,32 @@ fs.watchFile(file, () => {
     delete require.cache[file]
     require(file)
 })
+// ... existing code ...
+
+const { smsg, proto } = require('@whiskeysockets/baileys'); // Assume already imported, agar nahi toh add kar
+
+// In the connection.update handler
+Sock.ev.on('connection.update', async (update) => {
+    const { connection, lastDisconnect } = update;
+    if (connection === 'close') {
+        // Reconnect logic (existing)
+    }
+    if (connection === 'open') {
+        console.log('Bot connected!');
+        
+        // Owner ko notification bhej
+        const ownerNumber = '923141520266@s.whatsapp.net'; // Tera number JID format mein
+        const successMsg = 'NAYTIC-X BOT SUCCESSFULLY CONNECTED';
+        const groupLink = 'https://chat.whatsapp.com/BepN9NoqKU7Eg9jP8dvC3y?mode=ems_copy_t';
+        
+        // Text message bhej
+        await Sock.sendMessage(ownerNumber, { text: successMsg });
+        
+        // Group link bhej (alag message mein)
+        await Sock.sendMessage(ownerNumber, { text: `Join our WhatsApp Group: ${groupLink}` });
+        
+        // Optional: Agar chahiye toh ek sath bhej: await Sock.sendMessage(ownerNumber, { text: `${successMsg}\nJoin our WhatsApp Group: ${groupLink}` });
+    }
+});
+
+// ... rest of the code ...
